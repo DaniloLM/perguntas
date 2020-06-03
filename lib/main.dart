@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './questao.dart';
-import './resposta.dart';
+import 'package:perguntas/questionario.dart';
+import 'package:perguntas/resultado.dart';
 
 void main() {
   runApp(PerguntaApp());
@@ -12,34 +12,46 @@ class PerguntaApp extends StatefulWidget {
 }
 
 class _PerguntaAppState extends State<PerguntaApp> {
+  final _perguntas = const [
+    {
+      'pergunta': 'Qual o seu nome?',
+      'respostas': ['Danilo', 'Bruno', 'Miguel', 'Lis']
+    },
+    {
+      'pergunta': 'Qual sua idade?',
+      'respostas': ['32', '6', '3', '1 mês']
+    },
+    {
+      'pergunta': 'Qual o seu jogo preferido?',
+      'respostas': ['Fire emblem', 'Zelda', 'Mario Kart', 'Não jogo']
+    },
+  ];
   var _perguntaSelecionada = 0;
   void _responder() {
     setState(() {
       _perguntaSelecionada++;
     });
-    print(_perguntaSelecionada);
+  }
+
+  bool get temPerguntaSelecionada {
+    return _perguntaSelecionada < _perguntas.length;
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<String> perguntas = [
-      'Pergunta 1?',
-      'Pergunta 2?',
-      'Pergunta 3?',
-    ];
     return MaterialApp(
       home: Scaffold(
-          appBar: AppBar(
-            title: Text('Perguntando'),
-          ),
-          body: Column(
-            children: <Widget>[
-              Questao(perguntas[_perguntaSelecionada]),
-              Resposta('Resposta 11', _responder),
-              Resposta('Resposta 22', _responder),
-              Resposta('Resposta 33', _responder),
-            ],
-          )),
+        appBar: AppBar(
+          title: Text('Perguntando'),
+        ),
+        body: temPerguntaSelecionada
+            ? Questionario(
+                perguntas: _perguntas,
+                perguntaSelecionada: _perguntaSelecionada,
+                responder: _responder,
+              )
+            : Resultado(),
+      ),
     );
   }
 }
